@@ -41,3 +41,32 @@ body {
   text-decoration: underline;
   z-index: 2;
 }
+
+#win_notification {
+  display: none; /* Initially hidden */
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  border-radius: 10px;
+  background: linear-gradient(45deg, #ff6b6b, #f06595);
+  color: white;
+  font-size: 36px;
+  font-weight: bold;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  animation: fadeInOut 3s ease-in-out;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.8;
+  }
+  75% {
+    opacity: 1;
+  }
+}

@@ -3,16 +3,20 @@ class Game {
     this.cols = 4; // Number of columns
     this.rows = 4; // Number of rows
     this.count = this.cols * this.rows; // Total number, including empty spot (16)
-    this.emptyBlockCoords = [3, 3]; // The coordinates of the empty spot, which is initially at the bottom right until shuffled.
-    this.indexes = Array.from({ length: this.count }, (_, i) => i); // Keeps track of the positions of the blocks (initially in sequential order).
+    this.emptyBlockCoords = [3, 3]; // The coordinates of the empty spot, which is initially at the bottom right
+    this.indexes = Array.from({ length: this.count }, (_, i) => i); // Keeps track of the positions of the blocks
     this.init();
   }
 
   init() {
+    this.render();
+    this.addEventListeners();
+  }
+
+  render() {
     const container = document.getElementById("puzzle_container");
     container.innerHTML = "";
 
-    // backgroundPosition is modified using a formula that determines how to show off that specific part of the image. Found the formula online, should work for all tile types.
     for (let i = 0; i < this.count - 1; i++) {
       const block = document.createElement("div");
       block.className = "puzzle_block";
@@ -39,17 +43,31 @@ class Game {
         this.onMouseOutBlock(i)
       );
     }
-
-    document
-      .getElementById("shuffle")
-      .addEventListener("click", () => this.randomize(100));
   }
 
-  randomize(iterationCount) {
-    for (let i = 0; i < iterationCount; i++) {
+  addEventListeners() {
+    document
+      .getElementById("shuffle")
+      .addEventListener("click", () => this.randomize(100000));
+  }
+
+  randomize(moveCount) {
+    let lastMove = null;
+
+    for (let i = 0; i < moveCount; i++) {
       let neighbors = this.getMovableBlocks();
-      let randomIdx = Math.floor(Math.random() * neighbors.length);
-      this.moveBlock(neighbors[randomIdx]);
+      let options = neighbors.filter((idx) => idx !== lastMove);
+
+      if (options.length === 0) {
+        options = neighbors; // fallback if all moves are reversals
+      }
+
+      let randomIdx = Math.floor(Math.random() * options.length);
+      this.moveBlock(options[randomIdx]);
+
+      // Update last move to prevent immediate reversals
+      lastMove =
+        this.emptyBlockCoords[0] + this.emptyBlockCoords[1] * this.cols;
     }
   }
 
@@ -83,9 +101,18 @@ class Game {
     return false;
   }
 
+  updateEmptyBlockCoords() {
+    for (let i = 0; i < this.indexes.length; i++) {
+      if (this.indexes[i] === this.count - 1) {
+        this.emptyBlockCoords = [i % this.cols, Math.floor(i / this.cols)];
+        break;
+      }
+    }
+  }
+
   canMoveBlock(block) {
     let blockPos = [parseInt(block.style.left), parseInt(block.style.top)];
-    let blockWidth = block.clientWidth;
+    let blockWidth = block.clientWidth + 4; // Include border in width
     let blockCoords = [blockPos[0] / blockWidth, blockPos[1] / blockWidth];
     let diff = [
       Math.abs(blockCoords[0] - this.emptyBlockCoords[0]),
@@ -98,14 +125,14 @@ class Game {
 
   positionBlockAtCoord(blockIdx, x, y) {
     let block = this.blocks[blockIdx];
-    block.style.left = x * block.clientWidth + "px";
-    block.style.top = y * block.clientWidth + "px";
+    block.style.left = x * 100 + "px";
+    block.style.top = y * 100 + "px";
   }
 
   onClickOnBlock(blockIdx) {
     if (this.moveBlock(blockIdx)) {
       if (this.checkPuzzleSolved()) {
-        setTimeout(() => alert("Puzzle Solved!!"), 600);
+        this.showWinNotification();
       }
     }
   }
@@ -126,7 +153,16 @@ class Game {
         continue;
       if (this.indexes[i] !== i) return false;
     }
+
     return true;
+  }
+
+  showWinNotification() {
+    const notification = document.getElementById("win_notification");
+    notification.style.display = "block";
+    setTimeout(() => {
+      notification.style.display = "none";
+    }, 3000); // Hide after 3 seconds
   }
 }
 
