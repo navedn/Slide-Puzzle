@@ -9,14 +9,33 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 50px;
-  background-color: gray;
+  padding-top: 20px;
+  background-color: blanchedalmond;
+}
+
+h1 {
+  font-size: 36px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+p {
+  max-width: 800px;
+  text-align: center;
+  color: black;
+  margin-bottom: 5px;
+  line-height: 1.25;
 }
 
 #puzzle_container {
   position: relative;
   width: 400px;
   height: 400px;
+  margin-bottom: 5px;
+  border: 1px solid black;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  background-color: #fff;
 }
 
 .puzzle_block {
@@ -25,7 +44,7 @@ body {
   height: 100px;
   border: 2px solid black;
   background-size: 400px 400px;
-  color: black;
+  color: darkcyan;
   font-size: 32px;
   font-weight: bold;
   text-align: center;
@@ -36,14 +55,14 @@ body {
 }
 
 .movablepiece {
-  border-color: red;
-  color: #006600;
+  border-color: #ee4949;
+  color: darkcyan;
   text-decoration: underline;
   z-index: 2;
 }
 
 #win_notification {
-  display: none; /* Initially hidden */
+  display: none;
   position: absolute;
   top: 45%;
   left: 50%;
@@ -56,17 +75,58 @@ body {
   font-weight: bold;
   text-align: center;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  animation: fadeInOut 3s ease-in-out;
+  animation: winAnim 3s ease-in-out;
 }
 
-@keyframes fadeInOut {
+@keyframes winAnim {
   0% {
     opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
   }
   20% {
-    opacity: 0.8;
-  }
-  75% {
     opacity: 1;
+    transform: translate(-50%, -50%) scale(1.2);
+    text-shadow: 0 0 20px rgba(255, 255, 255, 1);
   }
+  40% {
+    transform: translate(-50%, -50%) scale(1);
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+  }
+  60% {
+    transform: translate(-50%, -50%) scale(1.1);
+    text-shadow: 0 0 15px rgba(255, 255, 255, 1);
+  }
+  80% {
+    transform: translate(-50%, -50%) scale(1);
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+}
+
+button,
+select {
+  margin: 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #012346;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover,
+select:hover {
+  color: white;
+  background-color: #012346;
+}
+
+select {
+  color: #333;
+  background-color: #fff;
 }
