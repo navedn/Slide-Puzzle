@@ -163,6 +163,20 @@ class Game {
     setTimeout(() => {
       notification.style.display = "none";
     }, 3000); // Hide after 3 seconds
+
+    const description = document.getElementById("description");
+    description.textContent = "Congratulations on solving the Fifteen Puzzle.";
+
+    const container = document.getElementById("puzzle_container");
+    container.innerHTML = ""; // Remove all tiles
+
+    const fullImage = document.createElement("div");
+    fullImage.style.backgroundImage = "url('background.jpg')";
+    fullImage.style.width = "400px";
+    fullImage.style.height = "400px";
+    fullImage.style.backgroundSize = "cover";
+
+    container.appendChild(fullImage);
   }
 }
 
