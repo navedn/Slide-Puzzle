@@ -5,12 +5,23 @@ class Game {
     this.count = this.cols * this.rows; // Total number, including empty spot (16)
     this.emptyBlockCoords = [3, 3]; // The coordinates of the empty spot, which is initially at the bottom right
     this.indexes = Array.from({ length: this.count }, (_, i) => i); // Keeps track of the positions of the blocks
+
+    this.backgrounds = [
+      "background1.jpg",
+      "background2.jpg",
+      "background3.jpg",
+      "background4.jpg",
+    ];
+    this.currentBackground =
+      this.backgrounds[Math.floor(Math.random() * this.backgrounds.length)];
+
     this.init();
   }
 
   init() {
     this.render();
     this.addEventListeners();
+    this.setBackground();
   }
 
   render() {
@@ -49,6 +60,18 @@ class Game {
     document
       .getElementById("shuffle")
       .addEventListener("click", () => this.randomize(100000));
+
+    const selector = document.getElementById("background_selector");
+    selector.addEventListener("change", (e) => {
+      this.currentBackground = e.target.value;
+      this.setBackground();
+    });
+  }
+
+  setBackground() {
+    for (let i = 0; i < this.blocks.length; i++) {
+      this.blocks[i].style.backgroundImage = `url('${this.currentBackground}')`;
+    }
   }
 
   randomize(moveCount) {
@@ -171,7 +194,7 @@ class Game {
     container.innerHTML = ""; // Remove all tiles
 
     const fullImage = document.createElement("div");
-    fullImage.style.backgroundImage = "url('background.jpg')";
+    fullImage.style.backgroundImage = `url('${this.currentBackground}')`;
     fullImage.style.width = "400px";
     fullImage.style.height = "400px";
     fullImage.style.backgroundSize = "cover";
