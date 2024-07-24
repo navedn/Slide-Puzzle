@@ -59,7 +59,7 @@ class Game {
   addEventListeners() {
     document
       .getElementById("shuffle")
-      .addEventListener("click", () => this.randomize(100000));
+      .addEventListener("click", () => this.randomize(5000));
 
     const selector = document.getElementById("background_selector");
     selector.addEventListener("change", (e) => {
@@ -75,22 +75,14 @@ class Game {
   }
 
   randomize(moveCount) {
-    let lastMove = null;
-
     for (let i = 0; i < moveCount; i++) {
       let neighbors = this.getMovableBlocks();
-      let options = neighbors.filter((idx) => idx !== lastMove);
 
-      if (options.length === 0) {
-        options = neighbors; // fallback if all moves are reversals
+      // Pick a random legal move from the neighbors
+      if (neighbors.length > 0) {
+        let randomIdx = Math.floor(Math.random() * neighbors.length);
+        this.moveBlock(neighbors[randomIdx]);
       }
-
-      let randomIdx = Math.floor(Math.random() * options.length);
-      this.moveBlock(options[randomIdx]);
-
-      // Update last move to prevent immediate reversals
-      lastMove =
-        this.emptyBlockCoords[0] + this.emptyBlockCoords[1] * this.cols;
     }
   }
 

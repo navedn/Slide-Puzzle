@@ -130,3 +130,12 @@ select {
   color: #333;
   background-color: #fff;
 }
+
+.validators {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
