@@ -3,8 +3,9 @@ class Game {
     this.cols = 4; // Number of columns
     this.rows = 4; // Number of rows
     this.count = this.cols * this.rows; // Total number, including empty spot (16)
-    this.emptyBlockCoords = [3, 3]; // The coordinates of the empty spot, which is initially at the bottom right
-    this.indexes = Array.from({ length: this.count }, (_, i) => i); // Keeps track of the positions of the blocks
+
+    this.emptyBlockCoords = [3, 3]; // The coordinates of the empty tile, which is initially at the bottom right
+    this.indexes = Array.from({ length: this.count }, (_, i) => i); // Keeps track of the positions of the tiles
 
     this.backgrounds = [
       "background1.jpg",
@@ -40,19 +41,17 @@ class Game {
     }
 
     this.indexes[this.count - 1] = this.count - 1;
-    this.blocks = document.getElementsByClassName("puzzle_block");
+    this.tiles = document.getElementsByClassName("puzzle_block");
 
-    for (let i = 0; i < this.blocks.length; i++) {
+    for (let i = 0; i < this.tiles.length; i++) {
       const x = i % this.cols;
       const y = Math.floor(i / this.cols);
       this.positionBlockAtCoord(i, x, y);
-      this.blocks[i].addEventListener("click", () => this.onClickOnBlock(i));
-      this.blocks[i].addEventListener("mouseover", () =>
+      this.tiles[i].addEventListener("click", () => this.onClickOnBlock(i));
+      this.tiles[i].addEventListener("mouseover", () =>
         this.onMouseOverBlock(i)
       );
-      this.blocks[i].addEventListener("mouseout", () =>
-        this.onMouseOutBlock(i)
-      );
+      this.tiles[i].addEventListener("mouseout", () => this.onMouseOutBlock(i));
     }
   }
 
@@ -69,8 +68,8 @@ class Game {
   }
 
   setBackground() {
-    for (let i = 0; i < this.blocks.length; i++) {
-      this.blocks[i].style.backgroundImage = `url('${this.currentBackground}')`;
+    for (let i = 0; i < this.tiles.length; i++) {
+      this.tiles[i].style.backgroundImage = `url('${this.currentBackground}')`;
     }
   }
 
@@ -78,7 +77,6 @@ class Game {
     for (let i = 0; i < moveCount; i++) {
       let neighbors = this.getMovableBlocks();
 
-      // Pick a random legal move from the neighbors
       if (neighbors.length > 0) {
         let randomIdx = Math.floor(Math.random() * neighbors.length);
         this.moveBlock(neighbors[randomIdx]);
@@ -99,7 +97,7 @@ class Game {
   }
 
   moveBlock(blockIdx) {
-    let block = this.blocks[blockIdx];
+    let block = this.tiles[blockIdx];
     let blockCoords = this.canMoveBlock(block);
     if (blockCoords != null) {
       this.positionBlockAtCoord(
@@ -139,7 +137,7 @@ class Game {
   }
 
   positionBlockAtCoord(blockIdx, x, y) {
-    let block = this.blocks[blockIdx];
+    let block = this.tiles[blockIdx];
     block.style.left = x * 100 + "px";
     block.style.top = y * 100 + "px";
   }
@@ -153,13 +151,13 @@ class Game {
   }
 
   onMouseOverBlock(blockIdx) {
-    if (this.canMoveBlock(this.blocks[blockIdx])) {
-      this.blocks[blockIdx].classList.add("movablepiece");
+    if (this.canMoveBlock(this.tiles[blockIdx])) {
+      this.tiles[blockIdx].classList.add("movablepiece");
     }
   }
 
   onMouseOutBlock(blockIdx) {
-    this.blocks[blockIdx].classList.remove("movablepiece");
+    this.tiles[blockIdx].classList.remove("movablepiece");
   }
 
   checkPuzzleSolved() {

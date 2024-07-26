@@ -51,7 +51,7 @@ p {
   line-height: 100px;
   cursor: pointer;
   user-select: none;
-  transition: left 0.3s, top 0.3s;
+  transition: left 0.5s, top 0.5s;
 }
 
 .movablepiece {
